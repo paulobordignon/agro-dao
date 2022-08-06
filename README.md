@@ -1,11 +1,16 @@
-# WEB3DEV x thirdweb - construa sua própria DAO com apenas Javascript
+## Agro DAO - A Decentralized Crowdfunding
+Join this DAO to be part of agribusiness investments.
 
-### **Bem vind@s 👋**
-Para iniciar com esse projeto, clone o repo e siga esses comandos:
+### Summary
 
-1. Rode `npm install` no diretório raiz
-2. Rode `npm start` para iniciar o projeto
-3. Comece a codar!
+The contracts are built using thirdweb so we can write it using just javascript.
 
-### **Perguntas?**
-Faça link da sua conta do Discord na [página no bootcamp](https://bootcamp.web3dev.com.br/courses/JS_DAO) para ter acesso aos canais de ajuda e monitores no servidor da WEB3DEV
+If you want deploy a new contract:
+
+- Fill out .env;
+- Node 12+ is mandatory.
+- Run node scripts/1-initialize-sdk.js;
+- Run node scripts/2-deploy-drop.js;
+- Get the address of ERC-1155 contract in previous step and fill out on script number 3;
+- Run node scripts/3-config-nft.js
+- Get the same address of ERC-1155 contract and fill out on script number 4;
