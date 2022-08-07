@@ -1,18 +1,84 @@
-import { useAddress, useMetamask, useEditionDrop } from '@thirdweb-dev/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useAddress, useMetamask, useEditionDrop, useToken } from '@thirdweb-dev/react';
 
 const App = () => {
-  // Usando os hooks que o thirdweb nos dá.
+  // Thirdweb hooks.
   const address = useAddress();
   const connectWithMetamask = useMetamask();
   console.log("👋 Address:", address);
 
-  // inicializar o contrato editionDrop
+  // ERC-1155 Address
   const editionDrop = useEditionDrop("0xb2dfe2e9b7d8a9a159baeda836de4bfc6637f954");
+  // ERC-20 Address
+  const token = useToken("0xf08946d1ce150334e16eE62781a5B797756A9483");
   // Variável de estado para sabermos se o usuário tem nosso NFT.
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
   // isClaiming nos ajuda a saber se está no estado de carregando enquanto o NFT é cunhado.
   const [isClaiming, setIsClaiming] = useState(false);
+  // Guarda a quantidade de tokens que cada membro tem nessa variável de estado.
+  const [memberTokenAmounts, setMemberTokenAmounts] = useState([]);
+  // O array guardando todos os endereços dos nosso membros.
+  const [memberAddresses, setMemberAddresses] = useState([]);
+
+  // Uma função para diminuir o endereço da carteira de alguém, não é necessário mostrar a coisa toda.
+  const shortenAddress = (str) => {
+    return str.substring(0, 6) + "..." + str.substring(str.length - 4);
+  };
+
+  // Esse useEffect pega todos os endereços dos nosso membros detendo nosso NFT.
+  useEffect(() => {
+    if (!hasClaimedNFT) {
+      return;
+    }
+    
+    // Do mesmo jeito que fizemos no arquivo 7-airdrop-token.js! Pegue os usuários que tem nosso NFT
+    // com o tokenId 0.
+    const getAllAddresses = async () => {
+      try {
+        const memberAddresses = await editionDrop.history.getAllClaimerAddresses(0);
+        setMemberAddresses(memberAddresses);
+        console.log("🚀 Endereços de membros", memberAddresses);
+      } catch (error) {
+        console.error("falha ao pegar lista de membros", error);
+      }
+
+    };
+    getAllAddresses();
+  }, [hasClaimedNFT, editionDrop.history]);
+
+  // Esse useEffect pega o # de tokens que cada membro tem.
+  useEffect(() => {
+    if (!hasClaimedNFT) {
+      return;
+    }
+
+    // Pega todos os saldos.
+    const getAllBalances = async () => {
+      try {
+        const amounts = await token.history.getAllHolderBalances();
+        setMemberTokenAmounts(amounts);
+        console.log("👜 Quantidades", amounts);
+      } catch (error) {
+        console.error("falha ao buscar o saldo dos membros", error);
+      }
+    };
+    getAllBalances();
+  }, [hasClaimedNFT, token.history]);
+
+
+  // Agora, nós combinamos os memberAddresses e os memberTokenAmounts em um único array
+  const memberList = useMemo(() => {
+    return memberAddresses.map((address) => {
+      // Se o endereço não está no memberTokenAmounts, isso significa que eles não
+      // detêm nada do nosso token.
+      const member = memberTokenAmounts?.find(({ holder }) => holder === address);
+
+      return {
+        address,
+        tokenAmount: member?.balance.displayValue || "0",
+      }
+    });
+  }, [memberAddresses, memberTokenAmounts]);
 
   useEffect(() => {
     // Se ele não tiver uma carteira conectada, saia!
@@ -57,24 +123,46 @@ const App = () => {
     return (
       <div className="landing">
         <h1>Welcome to Agro DAO</h1>
+        <h2>A Decentralized Crowdfunding</h2>
         <button onClick={connectWithMetamask} className="btn-hero">
           Connect Wallet
         </button>
       </div>
     )
-   }
-   
-   // Adicione esse pedacinho!
+  }
+
    if (hasClaimedNFT) {
     return (
       <div className="member-page">
-        <h1>Agro DAO Partner</h1>
-        <p>Congratulations!</p>
+        <h1>Agro DAO Partners</h1>
+        <h2>Welcome to the partners page.</h2>
+        <div>
+          <div>
+            <h2>Partners List:</h2>
+            <table className="card">
+              <thead>
+                <tr>
+                  <th>Address</th>
+                  <th>Tokens Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {memberList.map((member) => {
+                  return (
+                    <tr key={member.address}>
+                      <td>{shortenAddress(member.address)}</td>
+                      <td>{member.tokenAmount}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-    )
-   };
+    );
+  };
 
-  // Renderiza a tela de cunhagem do NFT.
   return (
     <div className="mint-nft">
       <h1>Mint NFT</h1>
@@ -82,7 +170,7 @@ const App = () => {
         disabled={isClaiming}
         onClick={mintNft}
       >
-        {isClaiming ? "Cunhando..." : "Cunhe seu NFT (GRATIS)"}
+        {isClaiming ? "Minting..." : "Mint your NFT (FREE)"}
       </button>
     </div>
   );
