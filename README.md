@@ -13,6 +13,8 @@ https://testnets.opensea.io/assets/rinkeby/0xb2dfe2e9b7d8a9a159baeda836de4bfc663
 Token $AGRO ERC-20
 https://rinkeby.etherscan.io/address/0xf08946d1ce150334e16eE62781a5B797756A9483
 
+Voting Contract
+https://rinkeby.etherscan.io/address/0xa28c41d472BFE519670870F590603d0d01A38dF8
 
 If you want deploy a new contract:
 
@@ -29,7 +31,15 @@ If you want deploy a new contract:
 - Run `node scripts/6-print-money.js`;
 - Fill out on script 7 the ERC-20 and ERC-1155 addresses;
 - Run `node scripts/7-airdrop-token.js` to make the airdrop;
+- Fill out on script 8 the ERC-20 address;
+- Run `node scripts/8-deploy-vote.js` to create a voting contract;
+- Fill out on script 9 the ERC-20 and voting contract addresses;
+- Run `node scripts/9-setup-vote.js` to transfer tokens to governance contract;
+- Fill out on script 10 the ERC-20 and voting contract addresses;
+- Run `node scripts/10-create-vote-proposals.js` to create new proposals;
+- Fill out on script 10 the ERC-20 contract address;
+- Run `node scripts/11-revoke-roles.js` to revoke wallet privileges;
 
-- Fill out the ERC-20 and ERC-1155 addresses on App.jsx;
+- Fill out the ERC-20, ERC-1155 and voting contract addresses on App.jsx;
 - Run npm instal;l
 - Run npm start.
