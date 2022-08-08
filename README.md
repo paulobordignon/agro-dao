@@ -1,7 +1,14 @@
 ## Agro DAO - A Decentralized Crowdfunding
 Join this DAO to be part of agribusiness investments.
 
+![ProjectImage!](public/agro-dao.png)
+
 ### Summary
+
+A Decentralized Autonomous Organization (DAO) is an entity with no central leadership. Decisions are made from the bottom up, governed by a community organized around a set of rules validated by a blockchain.
+
+To be a partner tou need mint a NFT.
+In this DAO partners can approve or not proposals.
 
 The contracts are built using thirdweb so we can write it using just javascript.
 
@@ -16,7 +23,7 @@ https://rinkeby.etherscan.io/address/0xf08946d1ce150334e16eE62781a5B797756A9483
 Voting Contract
 https://rinkeby.etherscan.io/address/0xa28c41d472BFE519670870F590603d0d01A38dF8
 
-If you want deploy a new contract:
+If you want deploy a new contracts and run the project:
 
 - Fill out .env;
 - Node 12+ is mandatory;
@@ -37,9 +44,8 @@ If you want deploy a new contract:
 - Run `node scripts/9-setup-vote.js` to transfer tokens to governance contract;
 - Fill out on script 10 the ERC-20 and voting contract addresses;
 - Run `node scripts/10-create-vote-proposals.js` to create new proposals;
-- Fill out on script 10 the ERC-20 contract address;
+- Fill out on script 11 the ERC-20 contract address;
 - Run `node scripts/11-revoke-roles.js` to revoke wallet privileges;
-
 - Fill out the ERC-20, ERC-1155 and voting contract addresses on App.jsx;
-- Run npm instal;l
-- Run npm start.
+- Run `npm install`;
+- Run `npm start`.
