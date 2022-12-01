@@ -21,16 +21,13 @@ import { readFileSync } from "fs";
 
     // with this we have the metadata in our contract
     const metadata = await editionDrop.metadata.get();
-    
+
     console.log(
       "✅ contract successfully deployed, address:",
-      editionDropAddress,
+      editionDropAddress
     );
-    console.log(
-      "✅ bundleDrop metadata:",
-      metadata,
-    );
+    console.log("✅ bundleDrop metadata:", metadata);
   } catch (error) {
     console.log("error to deploy", error);
   }
-})()
+})();

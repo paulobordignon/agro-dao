@@ -1,6 +1,13 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useAddress, useMetamask, useEditionDrop, useToken, useVote, useNetwork } from '@thirdweb-dev/react';
-import { ChainId } from '@thirdweb-dev/sdk'
+import { useState, useEffect, useMemo } from "react";
+import {
+  useAddress,
+  useMetamask,
+  useEditionDrop,
+  useToken,
+  useVote,
+  useNetwork,
+} from "@thirdweb-dev/react";
+import { ChainId } from "@thirdweb-dev/sdk";
 import { AddressZero } from "@ethersproject/constants";
 
 const App = () => {
@@ -11,11 +18,13 @@ const App = () => {
   console.log("👋 Address:", address);
 
   // ERC-1155 Address
-  const editionDrop = useEditionDrop("0xb2dfe2e9b7d8a9a159baeda836de4bfc6637f954");
+  const editionDrop = useEditionDrop(
+    "0x8E970a8e599B14f20411C8A5E06899bd9Ff4C9e3"
+  );
   // ERC-20 Address
-  const token = useToken("0xf08946d1ce150334e16eE62781a5B797756A9483");
+  const token = useToken("0x8C8157f04C2B4d47F9f498C4FBF0c37C613E5624");
   // Voting contract address
-  const vote = useVote("0xa28c41d472BFE519670870F590603d0d01A38dF8")
+  const vote = useVote("0xA195CaE00E3E5BACD52eA7065eb4A69811644B46");
   // User have NFT?
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
@@ -38,13 +47,13 @@ const App = () => {
 
     const getAllAddresses = async () => {
       try {
-        const memberAddresses = await editionDrop.history.getAllClaimerAddresses(0);
+        const memberAddresses =
+          await editionDrop.history.getAllClaimerAddresses(0);
         setMemberAddresses(memberAddresses);
         console.log("🚀 Partners Addresses", memberAddresses);
       } catch (error) {
         console.error("fail to get partners list", error);
       }
-
     };
     getAllAddresses();
   }, [hasClaimedNFT, editionDrop.history]);
@@ -68,37 +77,39 @@ const App = () => {
 
   const memberList = useMemo(() => {
     return memberAddresses.map((address) => {
-      const member = memberTokenAmounts?.find(({ holder }) => holder === address);
+      const member = memberTokenAmounts?.find(
+        ({ holder }) => holder === address
+      );
 
       return {
         address,
         tokenAmount: member?.balance.displayValue || "0",
-      }
+      };
     });
   }, [memberAddresses, memberTokenAmounts]);
 
   useEffect(() => {
     if (!address) {
-      return
+      return;
     }
 
     const checkBalance = async () => {
       try {
-        const balance = await editionDrop.balanceOf(address, 0)
+        const balance = await editionDrop.balanceOf(address, 0);
         if (balance.gt(0)) {
-          setHasClaimedNFT(true)
-          console.log("🌟 this user have the partner NFT!")
+          setHasClaimedNFT(true);
+          console.log("🌟 this user have the partner NFT!");
         } else {
-          setHasClaimedNFT(false)
-          console.log("😭 this user doesn't have the partner NFT.")
+          setHasClaimedNFT(false);
+          console.log("😭 this user doesn't have the partner NFT.");
         }
       } catch (error) {
-        setHasClaimedNFT(false)
-        console.error("Fail to read", error)
+        setHasClaimedNFT(false);
+        console.error("Fail to read", error);
       }
-    }
-    checkBalance()
-  }, [address, editionDrop])
+    };
+    checkBalance();
+  }, [address, editionDrop]);
 
   useEffect(() => {
     if (!hasClaimedNFT) {
@@ -141,14 +152,15 @@ const App = () => {
       }
     };
     checkIfUserHasVoted();
-
   }, [hasClaimedNFT, proposals, address, vote]);
 
   const mintNft = async () => {
     try {
       setIsClaiming(true);
       await editionDrop.claim("0", 1);
-      console.log(`🌊 Mint success: https://testnets.opensea.io/assets/${editionDrop.getAddress()}/0`);
+      console.log(
+        `🌊 Mint success: https://testnets.opensea.io/assets/${editionDrop.getAddress()}/0`
+      );
       setHasClaimedNFT(true);
     } catch (error) {
       setHasClaimedNFT(false);
@@ -158,13 +170,13 @@ const App = () => {
     }
   };
 
-  if (address && (network?.[0].data.chain.id !== ChainId.Rinkeby)) {
+  if (address && network?.[0].data.chain.id !== ChainId.Goerli) {
     return (
       <div className="unsupported-network">
-        <h2>Please, connect on rinkeby network</h2>
+        <h2>Please, connect on Goerli network</h2>
         <p>
-          This dapp only works with the Rinkeby network,
-          please switch networks in your wallet.
+          This dapp only works with the Goerli network, please switch networks
+          in your wallet.
         </p>
       </div>
     );
@@ -179,15 +191,15 @@ const App = () => {
           Connect Wallet
         </button>
       </div>
-    )
+    );
   }
 
-   if (hasClaimedNFT) {
+  if (hasClaimedNFT) {
     return (
       <div className="member-page">
         <h1>Agro DAO Partners</h1>
         <h2>Welcome to the partners page.</h2>
-        <div style={{marginTop: '4rem'}}>
+        <div style={{ marginTop: "4rem" }}>
           <div>
             <h2>Partners List:</h2>
             <table className="card">
@@ -213,11 +225,11 @@ const App = () => {
             <h2>Active Proposals</h2>
             <form
               onSubmit={async (e) => {
-                e.preventDefault()
-                e.stopPropagation()
+                e.preventDefault();
+                e.stopPropagation();
 
                 // before doing the async things, disable the button to prevent double click
-                setIsVoting(true)
+                setIsVoting(true);
 
                 // take the votes in the form
                 const votes = proposals.map((proposal) => {
@@ -225,60 +237,60 @@ const App = () => {
                     proposalId: proposal.proposalId,
                     // abstention is the default choice
                     vote: 2,
-                  }
+                  };
                   proposal.votes.forEach((vote) => {
                     const elem = document.getElementById(
                       proposal.proposalId + "-" + vote.type
-                    )
+                    );
 
                     if (elem.checked) {
-                      voteResult.vote = vote.type
-                      return
+                      voteResult.vote = vote.type;
+                      return;
                     }
-                  })
-                  return voteResult
-                })
+                  });
+                  return voteResult;
+                });
 
                 // we make sure the user delegates their tokens for the vote
                 try {
                   // checks if the wallet needs to delegate tokens before voting
-                  const delegation = await token.getDelegationOf(address)
+                  const delegation = await token.getDelegationOf(address);
                   if (delegation === AddressZero) {
-                    await token.delegateTo(address)
+                    await token.delegateTo(address);
                   }
 
                   try {
                     await Promise.all(
                       votes.map(async ({ proposalId, vote: _vote }) => {
-                        const proposal = await vote.get(proposalId)
+                        const proposal = await vote.get(proposalId);
                         if (proposal.state === 1) {
-                          return vote.vote(proposalId, _vote)
+                          return vote.vote(proposalId, _vote);
                         }
-                        return
+                        return;
                       })
-                    )
+                    );
                     try {
                       await Promise.all(
                         votes.map(async ({ proposalId }) => {
-                          const proposal = await vote.get(proposalId)
+                          const proposal = await vote.get(proposalId);
 
                           if (proposal.state === 4) {
-                            return vote.execute(proposalId)
+                            return vote.execute(proposalId);
                           }
                         })
-                      )
-                      setHasVoted(true)
-                      console.log("successfully voted")
+                      );
+                      setHasVoted(true);
+                      console.log("successfully voted");
                     } catch (err) {
-                      console.error("fail to execute the vote", err)
+                      console.error("fail to execute the vote", err);
                     }
                   } catch (err) {
-                    console.error("fail to vote", err)
+                    console.error("fail to vote", err);
                   }
                 } catch (err) {
-                  console.error("token delegate failed")
+                  console.error("token delegate failed");
                 } finally {
-                  setIsVoting(false)
+                  setIsVoting(false);
                 }
               }}
             >
@@ -291,7 +303,7 @@ const App = () => {
                         Against: "Against",
                         For: "In Favor",
                         Abstain: "Abstention",
-                      }
+                      };
                       return (
                         <div key={type}>
                           <input
@@ -305,7 +317,7 @@ const App = () => {
                             {translations[label]}
                           </label>
                         </div>
-                      )
+                      );
                     })}
                   </div>
                 </div>
@@ -314,12 +326,13 @@ const App = () => {
                 {isVoting
                   ? "Voting..."
                   : hasVoted
-                    ? "You have already voted"
-                    : "Submit votes"}
+                  ? "You have already voted"
+                  : "Submit votes"}
               </button>
               {!hasVoted && (
                 <small>
-                  This will submit several transactions that you will need to sign.
+                  This will submit several transactions that you will need to
+                  sign.
                 </small>
               )}
             </form>
@@ -327,15 +340,12 @@ const App = () => {
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="mint-nft">
       <h1>Mint NFT</h1>
-      <button
-        disabled={isClaiming}
-        onClick={mintNft}
-      >
+      <button disabled={isClaiming} onClick={mintNft}>
         {isClaiming ? "Minting..." : "Mint your NFT (FREE)"}
       </button>
     </div>

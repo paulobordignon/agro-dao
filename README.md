@@ -1,4 +1,5 @@
 ## Agro DAO - A Decentralized Crowdfunding
+
 Join this DAO to be part of agribusiness investments.
 
 ![ProjectImage!](public/agro-dao.png)
@@ -7,23 +8,21 @@ Join this DAO to be part of agribusiness investments.
 
 A Decentralized Autonomous Organization (DAO) is an entity with no central leadership. Decisions are made from the bottom up, governed by a community organized around a set of rules validated by a blockchain.
 
-To be a partner tou need mint a NFT.
-In this DAO partners can approve or not proposals.
+To be a partner you need to mint an NFT. In this DAO partners can approve or not proposals through the governance token and governance contract.
 
-The contracts are built using thirdweb so we can write it using just javascript.
+### Smart Contracts
 
-Contract ERC-1155 and NFT AGRO DAO Partner
-https://rinkeby.etherscan.io/address/0xb2dfe2e9b7d8a9a159baeda836de4bfc6637f954
-https://rinkeby.etherscan.io/token/0xb2dfe2e9b7d8a9a159baeda836de4bfc6637f954
-https://testnets.opensea.io/assets/rinkeby/0xb2dfe2e9b7d8a9a159baeda836de4bfc6637f954/0
+The contracts are built using thirdweb so we can write them using just javascript.
 
-Token $AGRO ERC-20
-https://rinkeby.etherscan.io/address/0xf08946d1ce150334e16eE62781a5B797756A9483
+The first is an [ERC-1155](https://goerli.etherscan.io/address/0x8E970a8e599B14f20411C8A5E06899bd9Ff4C9e3) that allows multiple people to hold the same NFT. This is more effective in comparison a taxes of an ERC-721 where all NFTs are unique, and for our business is not appropriate because we want to only have an [NFT](https://testnets.opensea.io/collection/agrodao-collection) for all partners.
 
-Voting Contract
-https://rinkeby.etherscan.io/address/0xa28c41d472BFE519670870F590603d0d01A38dF8
+The second contract is an [ERC-20](https://goerli.etherscan.io/token/0x8C8157f04C2B4d47F9f498C4FBF0c37C613E5624) this is an Ethereum token pattern. Our token is named $AGRO and has an initial amount of 1,000,000. We can do a token airdrop for all NFT holders.
 
-If you want deploy a new contracts and run the project:
+The third is a [governance contract](https://goerli.etherscan.io/token/0xA195CaE00E3E5BACD52eA7065eb4A69811644B46) where partners can vote and open new proposals. For example: open a proposal to pay a developer that helped the DAO on a website, if there is a minimum quantity of tokens used this proposal will be approved.
+
+### Run the project
+
+If you want to deploy new contracts and run the project:
 
 - Fill out .env;
 - Node 12+ is mandatory;

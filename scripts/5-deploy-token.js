@@ -11,10 +11,7 @@ import sdk from "./1-initialize-sdk.js";
       // This is in case we want to sell the token, in which case we don't, so AddressZero again.
       primary_sale_recipient: AddressZero,
     });
-    console.log(
-      "✅ Token deployed. Address:",
-      tokenAddress,
-    );
+    console.log("✅ Token deployed. Address:", tokenAddress);
   } catch (error) {
     console.error("Error to deploy token", error);
   }

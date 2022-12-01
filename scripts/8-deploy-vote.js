@@ -7,7 +7,7 @@ import sdk from "./1-initialize-sdk.js";
       name: "Agro DAO - Voting Contract",
 
       // ERC-20 Address
-      voting_token_address: "0xf08946d1ce150334e16eE62781a5B797756A9483",
+      voting_token_address: "0x8C8157f04C2B4d47F9f498C4FBF0c37C613E5624",
 
       // After a proposal is created, when can members start voting? For now, we put this as immediately.
       voting_delay_in_blocks: 0,
@@ -24,7 +24,7 @@ import sdk from "./1-initialize-sdk.js";
 
     console.log(
       "✅ Voting module successfully deployed to address:",
-      voteContractAddress,
+      voteContractAddress
     );
   } catch (err) {
     console.error("Failed to deploy votes module", err);

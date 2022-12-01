@@ -1,7 +1,9 @@
 import sdk from "./1-initialize-sdk.js";
 import { readFileSync } from "fs";
 
-const editionDrop = sdk.getEditionDrop("0xb2dFE2E9b7D8a9a159baeda836de4BfC6637F954");
+const editionDrop = sdk.getEditionDrop(
+  "0x8E970a8e599B14f20411C8A5E06899bd9Ff4C9e3"
+);
 
 (async () => {
   try {
@@ -16,4 +18,4 @@ const editionDrop = sdk.getEditionDrop("0xb2dFE2E9b7D8a9a159baeda836de4BfC6637F9
   } catch (error) {
     console.error("error to create a new NFT", error);
   }
-})()
+})();
